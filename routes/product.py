@@ -8,6 +8,9 @@ product_bp = Blueprint('product', __name__, url_prefix='/products')
 @product_bp.route('/')
 def list():
     products = Product.select()
+    # 税込価格を計算してテンプレートに渡す
+    for product in products:
+        product.price_with_tax = float(product.price) * (1 + product.tax_rate / 100)
     return render_template('product_list.html', title='製品一覧', items=products)
 
 
@@ -19,7 +22,8 @@ def add():
         name = request.form['name']
         price = request.form['price']
         stock = request.form.get('stock', 0)
-        Product.create(name=name, price=price, stock=stock)
+        tax_rate = request.form.get('tax_rate', 10)
+        Product.create(name=name, price=price, stock=stock, tax_rate=tax_rate)
         return redirect(url_for('product.list'))
     
     return render_template('product_add.html')
@@ -35,6 +39,7 @@ def edit(product_id):
         product.name = request.form['name']
         product.price = request.form['price']
         product.stock = request.form.get('stock', 0)
+        product.tax_rate = request.form.get('tax_rate', 10)
         product.save()
         return redirect(url_for('product.list'))
 
