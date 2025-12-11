@@ -17,8 +17,17 @@ def add():
     if request.method == 'POST':
         user_id = request.form['user_id']
         product_id = request.form['product_id']
+
+        #【追加】'order_quantity' の値を取得
+        # 'order_quantity'がPOSTデータに含まれていない場合や不正な場合はデフォルトで1にする
+        try:
+            order_quantity = int(request.form.get('order_quantity', 1))
+        except ValueError:
+            order_quantity = 1  # 整数に変換できない場合はデフォルト値を使用  
+            
         order_date = datetime.now()
-        Order.create(user=user_id, product=product_id, order_date=order_date)
+
+        Order.create(user=user_id, product=product_id, quantity=order_quantity, order_date=order_date)
         return redirect(url_for('order.list'))
     
     users = User.select()
@@ -35,6 +44,15 @@ def edit(order_id):
     if request.method == 'POST':
         order.user = request.form['user_id']
         order.product = request.form['product_id']
+
+        #【追加】 'order_quantity' の値を取得し、orderオブジェクトに設定
+        try:
+            order_quantity = int(request.form.get('order_quantity', 1))
+        except ValueError:
+            order_quantity = 1 
+            
+        order.order_quantity = order_quantity # order.order_quantity に値を設定
+
         order.save()
         return redirect(url_for('order.list'))
 
