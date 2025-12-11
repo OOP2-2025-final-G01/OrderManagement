@@ -28,6 +28,9 @@
                 {% endfor %}
             </select>
         </label><br>
+        <label>注文数:
+            <input type="number" name="order_quantity" value="{{ order.order_quantity }}" min="1" required>
+        </label><br>
         <button type="submit">保存</button>
     </form>
 </body>
