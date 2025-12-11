@@ -20,7 +20,7 @@ def add():
     if request.method == 'POST':
         name = request.form['name']
         age = request.form['age']
-        phone = request.form.get(phone) # フォームから電話番号から取得
+        phone = request.form.get('phone') # フォームから電話番号から取得
         User.create(name=name, age=age, phone=phone)
         return redirect(url_for('user.list'))
     
