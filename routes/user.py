@@ -20,8 +20,8 @@ def add():
     if request.method == 'POST':
         name = request.form['name']
         age = request.form['age']
-        phone = request.form.get('phone') # フォームから電話番号から取得
-        User.create(name=name, age=age, phone=phone)
+        phone = request.form.get('phone_number') # フォームから電話番号から取得
+        User.create(name=name, age=age, phone_number=phone)
         return redirect(url_for('user.list'))
     
     return render_template('user_add.html')
@@ -36,7 +36,7 @@ def edit(user_id):
     if request.method == 'POST':
         user.name = request.form['name']
         user.age = request.form['age']
-        user.phone = request.form.get('phone') # 電話番号更新
+        user.phone_number = request.form.get('phone_number') # 電話番号更新
         user.save()
         return redirect(url_for('user.list'))
 
