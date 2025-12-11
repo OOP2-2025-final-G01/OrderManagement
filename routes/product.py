@@ -18,7 +18,8 @@ def add():
     if request.method == 'POST':
         name = request.form['name']
         price = request.form['price']
-        Product.create(name=name, price=price)
+        stock = request.form.get('stock', 0)
+        Product.create(name=name, price=price, stock=stock)
         return redirect(url_for('product.list'))
     
     return render_template('product_add.html')
@@ -33,6 +34,7 @@ def edit(product_id):
     if request.method == 'POST':
         product.name = request.form['name']
         product.price = request.form['price']
+        product.stock = request.form.get('stock', 0)
         product.save()
         return redirect(url_for('product.list'))
 
