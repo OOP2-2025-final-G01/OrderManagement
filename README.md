@@ -27,7 +27,7 @@ python 3.13 or higher
 Flask==3.0.3
 peewee==3.17.7
 --------------------------------------
-import io         顧客で使用したライブラリ
+import io         #顧客で使用したライブラリ
 import base64
 import matplotlib
 matplotlib.use('Agg')  # GUIのない環境用
