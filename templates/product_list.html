@@ -18,7 +18,9 @@
             <tr>
                 <th>&nbsp;</th>
                 <th>製品名</th>
-                <th>価格</th>
+                <th>価格（税抜）</th>
+                <th>消費税率</th>
+                <th>税込価格</th>
                 <th>在庫数</th>
             </tr>
         </thead>
@@ -27,7 +29,9 @@
             <tr>
                 <td><a href="{{ url_for('product.edit', product_id=product.id) }}">編集</a></td>
                 <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
+                <td>¥{{ "%.2f"|format(product.price) }}</td>
+                <td>{{ product.tax_rate }}%</td>
+                <td>¥{{ "%.2f"|format(product.price_with_tax) }}</td>
                 <td>{{ product.stock }}</td>
             </tr>
             {% endfor %}
