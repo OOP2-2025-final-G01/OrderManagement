@@ -3,58 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-</head>
-<body>
-    <h1>{{ title }}</h1>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
     </ul>
-    <form action="{{ url_for('user.list') }}" method="get">
-        <input type="text" name="search" value="{{ search_query if search_query else '' }}" placeholder="電話番号で検索">
-        <button type="submit">検索</button>
-        <a href="{{ url_for('user.list') }}">リセット</a>
-    </form>
-    
-    <hr>
+    <style>
+        /* テーブルのデザイン（border="1"の代わり） */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* グラフ表示エリアのスタイル */
+        .graph-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+        }
+        .search-area {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <div class="search-area">
+        <form action="{{ url_for('user.list') }}" method="get">
+            <input type="text" name="search" value="{{ search_query if search_query else '' }}" placeholder="電話番号で検索">
+            <button type="submit">検索</button>
+            <a href="{{ url_for('user.list') }}">リセット</a>
+        </form>
+    </div>
 
     {% if plot_url %}
-        <div style="text-align: center; margin: 20px 0;">
-            <h3>検索結果の年齢分布</h3>
+        <div class="graph-container">
+            <h3>年齢分布（{{ items|length }}件）</h3>
             <img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布グラフ" style="max-width: 400px; height: auto;">
         </div>
     {% endif %}
 
     <div style="margin-bottom: 10px;">
-        <a href="{{ url_for('user.add') }}">新規登録</a>
+        <a href="{{ url_for('user.add') }}">新規ユーザー登録</a>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th style="width: 50px;">&nbsp;</th>
                 <th>名前</th>
                 <th>年齢</th>
                 <th>電話番号</th>
-                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {% for user in items %}
             <tr>
-                <td>{{ user.id }}</td>
+                <td style="text-align: center;">
+                    <a href="{{ url_for('user.edit', user_id=user.id) }}">編集</a>
+                </td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.age }}</td>
                 <td>{{ user.phone_number }}</td>
-                <td>
-                    <a href="{{ url_for('user.edit', user_id=user.id) }}">編集</a>
-                </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="5">ユーザーが見つかりません</td>
+                <td colspan="4">データが見つかりません</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
 </body>
 </html>

@@ -97,7 +97,7 @@
             <div class="menu-section">
                 <p class="menu-label">顧客情報</p>
                 <ul>
-                    <li><a href="#">新規顧客登録</a></li>
+                    <li><a href="{{ url_for('user.add') }}">新規顧客登録</a></li>
                     <li><a href="{{ url_for('user.list') }}">顧客リスト</a></li>
                 </ul>
             </div>
@@ -105,7 +105,7 @@
             <div class="menu-section">
                 <p class="menu-label">自社製品情報</p>
                 <ul>
-                    <li><a href="#">新規製品登録</a></li>
+                    <li><a href="{{ url_for('product.add') }}">新規製品登録</a></li>
                     <li><a href="{{ url_for('product.list') }}">製品リスト</a></li>
                     <li><a href="{{ url_for('store.list') }}">店舗リスト</a></li>
                 </ul>
