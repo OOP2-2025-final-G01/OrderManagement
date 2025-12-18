@@ -2,33 +2,56 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>データ一覧</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <title>{{ title }}</title>
 </head>
 <body>
     <h1>{{ title }}</h1>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li><a href="{{ url_for('user.list') }}">ユーザー一覧</a></li>
     </ul>
+    <form action="{{ url_for('user.list') }}" method="get">
+        <input type="text" name="search" value="{{ search_query if search_query else '' }}" placeholder="電話番号で検索">
+        <button type="submit">検索</button>
+        <a href="{{ url_for('user.list') }}">リセット</a>
+    </form>
+    
+    <hr>
 
-    <a href="{{ url_for('user.add') }}">新規ユーザー追加</a>
+    {% if plot_url %}
+        <div style="text-align: center; margin: 20px 0;">
+            <h3>検索結果の年齢分布</h3>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布グラフ" style="max-width: 400px; height: auto;">
+        </div>
+    {% endif %}
+
+    <div style="margin-bottom: 10px;">
+        <a href="{{ url_for('user.add') }}">新規登録</a>
+    </div>
+
     <table>
         <thead>
             <tr>
-                <th>&nbsp;</th>
+                <th>ID</th>
                 <th>名前</th>
                 <th>年齢</th>
                 <th>電話番号</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             {% for user in items %}
             <tr>
-                <td><a href="{{ url_for('user.edit', user_id=user.id) }}">編集</a></td>
+                <td>{{ user.id }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.age }}</td>
-                <td>{{ user.phone_number}}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>
+                    <a href="{{ url_for('user.edit', user_id=user.id) }}">編集</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">ユーザーが見つかりません</td>
             </tr>
             {% endfor %}
         </tbody>

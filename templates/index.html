@@ -2,16 +2,121 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>注文管理システム</title>
+    <title>製品売上管理</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <style>
+        /* index.html 専用：サイドバーを整えるCSS */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+            background-color: #ffffff; /* 全体を白基調に */
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- サイドバーのデザイン --- */
+        .sidebar {
+            width: 240px;
+            background-color: #ffffff;
+            border-right: 1px solid #eeeeee; /* 薄い境界線 */
+            padding: 40px 25px;
+            box-sizing: border-box;
+        }
+
+        .nav-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 50px 0;
+            color: #000;
+            line-height: 1.2;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .menu-label {
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 12px;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #666; /* リンクは少し薄い色 */
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            color: #000; /* ホバーで黒く */
+            font-weight: 500;
+        }
+
+        /* --- 右側のエリア --- */
+        .content {
+            flex-grow: 1;
+            padding: 60px;
+            background-color: #ffffff;
+        }
+
+        .content-title {
+            font-size: 24px;
+            color: #ccc; /* グラフがない間は薄く表示 */
+        }
+    </style>
 </head>
 <body>
-    <h1>注文管理システム</h1>
-    <ul>
-      <li><a href="{{ url_for('user.list') }}">ユーザー（顧客）</a></li>
-      <li><a href="{{ url_for('product.list') }}">製品</a></li>
-      <li><a href="{{ url_for('order.list') }}">注文</a></li>
-      <li><a href="{{ url_for('store.list') }}">店舗</a></li>
-    </ul>
+    <div class="container">
+        <nav class="sidebar">
+            <h1 class="nav-title">製品売上<br>管理</h1>
+            
+            <div class="menu-section">
+                <p class="menu-label">売上管理</p>
+                <ul>
+                    <li><a href="{{ url_for('order.add') }}">新規登録</a></li>
+                    <li><a href="{{ url_for('order.list') }}">売上一覧</a></li>
+                </ul>
+            </div>
+
+            <div class="menu-section">
+                <p class="menu-label">顧客情報</p>
+                <ul>
+                    <li><a href="#">新規顧客登録</a></li>
+                    <li><a href="{{ url_for('user.list') }}">顧客リスト</a></li>
+                </ul>
+            </div>
+
+            <div class="menu-section">
+                <p class="menu-label">自社製品情報</p>
+                <ul>
+                    <li><a href="#">新規製品登録</a></li>
+                    <li><a href="{{ url_for('product.list') }}">製品リスト</a></li>
+                    <li><a href="{{ url_for('store.list') }}">店舗リスト</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="content">
+            <div class="content-title">
+                ※ ここにグラフが表示される予定です
+            </div>
+        </main>
+    </div>
 </body>
 </html>
