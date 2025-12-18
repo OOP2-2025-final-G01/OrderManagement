@@ -2,11 +2,11 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>データ一覧</title>
+    <title>製品一覧</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
 </head>
 <body>
-    <h1>{{ title }}</h1>
+    <h1>製品一覧</h1>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
         <li>製品一覧</li>
@@ -14,18 +14,15 @@
 
     <div style="margin-bottom: 20px;">
         <a href="{{ url_for('product.add') }}" class="button">新規製品追加</a>
-        <a href="{{ url_for('product.sales_chart') }}" style="margin-left: 20px; color: #2ecc71; font-weight: bold;">📈 売上統計グラフ</a>
     </div>
 
-    <table>
+    <table class="data-table">
         <thead>
             <tr>
-                <th>&nbsp;</th>
+                <th>操作</th>
                 <th>製品名</th>
                 <th>所属店舗</th>
-                <th>価格（税抜）</th>
-                <th>消費税率</th>
-                <th>税込価格</th>
+                <th>価格(税込)</th>
                 <th>在庫数</th>
             </tr>
         </thead>
@@ -35,8 +32,6 @@
                 <td><a href="{{ url_for('product.edit', product_id=product.id) }}">編集</a></td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.store.name if product.store else '未設定' }}</td>
-                <td>¥{{ "%.2f"|format(product.price) }}</td>
-                <td>{{ product.tax_rate }}%</td>
                 <td>¥{{ "%.2f"|format(product.price_with_tax) }}</td>
                 <td>{{ product.stock }}</td>
             </tr>

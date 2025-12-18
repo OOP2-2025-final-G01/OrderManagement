@@ -15,4 +15,5 @@ class Product(Model):
 
     @property
     def price_with_tax(self):
+        """税込価格（読み取り専用）"""
         return float(self.price) * (1 + self.tax_rate / 100)

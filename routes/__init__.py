@@ -7,6 +7,6 @@ from .store import store_bp
 blueprints = [
   user_bp,
   product_bp,
-  order_bp,
+  order_bp, # これが抜けているとルーティングエラーになります
   store_bp
 ]

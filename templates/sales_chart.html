@@ -2,19 +2,13 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>売上統計グラフ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <title>売上グラフ</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
 </head>
 <body>
-    <h1>店舗別 在庫総額統計</h1>
-    <ul class="breadcrumb">
-        <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li><a href="{{ url_for('product.list') }}">製品一覧</a></li>
-        <li>売上グラフ</li>
-    </ul>
-
-    <div style="width: 80%; margin: 20px auto; background: white; padding: 20px; border-radius: 8px;">
+    <h1>店舗別売上集計グラフ</h1>
+    <div style="width: 80%; margin: 50px auto;">
         <canvas id="myChart"></canvas>
     </div>
 
@@ -23,27 +17,20 @@
     </script>
 
     <script>
-        // HTML要素からデータを安全に取得（これでJavaScriptのエラーが消えます）
-        const dataElement = document.getElementById('chart-data');
-        const chartData = JSON.parse(dataElement.textContent);
-
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
+        const data = JSON.parse(document.getElementById('chart-data').textContent);
+        new Chart(document.getElementById('myChart'), {
             type: 'bar',
             data: {
-                labels: chartData.labels,
+                labels: data.labels,
                 datasets: [{
-                    label: '在庫総額（単価×在庫数）',
-                    data: chartData.values,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    label: '売上合計(円)',
+                    data: data.values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'blue',
                     borderWidth: 1
                 }]
             },
-            options: {
-                responsive: true,
-                scales: { y: { beginAtZero: true } }
-            }
+            options: { scales: { y: { beginAtZero: true } } }
         });
     </script>
 </body>
