@@ -26,6 +26,14 @@ python 3.13 or higher
 # python lib
 Flask==3.0.3
 peewee==3.17.7
+--------------------------------------
+import io         顧客で使用したライブラリ
+import base64
+import matplotlib
+matplotlib.use('Agg')  # GUIのない環境用
+import matplotlib.pyplot as plt
+import japanize_matplotlib
+--------------------------------------
 ```
 
 ## 使い方: usage
@@ -35,6 +43,7 @@ peewee==3.17.7
 ```bash
 $ rm -f my_database.db && python app.py
 $ pip install Flask==3.0.3 peewee==3.17.7
+$ pip install matplotlib japanize-matplotlib
 $ rm -f my_database.db
 $ timeout 5 python app.py || true
 $ python -c "from models import initialize_database; initialize_database(); print('Database initialized successfully!')"
