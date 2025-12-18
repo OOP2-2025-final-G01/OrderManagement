@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from models import Product
+from flask import jsonify
 
 # Blueprintの作成
 product_bp = Blueprint('product', __name__, url_prefix='/products')
@@ -11,10 +12,17 @@ def list():
     # 税込価格を計算してテンプレートに渡す
     for product in products:
         product.price_with_tax = float(product.price) * (1 + product.tax_rate / 100)
-    # 製品名ラベルと在庫データを作成（Chart.js 用）
+    # 製品一覧ページは従来通りレンダリングする（グラフはホームで表示）
+    return render_template('product_list.html', title='製品一覧', items=products)
+
+
+@product_bp.route('/chart-data')
+def chart_data():
+    """製品の名前ラベルと在庫数をJSONで返す（ホームのChart.jsが取得する）"""
+    products = Product.select()
     labels = [p.name for p in products]
     data = [int(p.stock or 0) for p in products]
-    return render_template('product_list.html', title='製品一覧', items=products, labels=labels, data=data)
+    return jsonify({'labels': labels, 'data': data})
 
 
 @product_bp.route('/add', methods=['GET', 'POST'])
