@@ -34,6 +34,16 @@ peewee==3.17.7
 > このリポジトリのアプリを動作させるために行う手順を詳細に書いてください。
 
 ```bash
+$ rm -f my_database.db && python app.py
+$ pip install Flask==3.0.3 peewee==3.17.7
+$ rm -f my_database.db
+$ timeout 5 python app.py || true
+$ python -c "from models import initialize_database; initialize_database(); print('Database initialized successfully!')"
+
+# Try accessing "http://localhost:8080" in your browser.
+```
+
+```bash
 $ python app.py
 # Try accessing "http://localhost:8080" in your browser.
 ```
