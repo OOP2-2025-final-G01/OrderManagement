@@ -1,6 +1,7 @@
 from flask import Flask, render_template
-from models import initialize_database
+from models import initialize_database, Product
 from routes import blueprints
+import os
 
 app = Flask(__name__)
 
@@ -14,7 +15,12 @@ for blueprint in blueprints:
 # ホームページのルート
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # 製品ごとの在庫データを取得してホームに渡す
+    products = Product.select()
+    labels = [p.name for p in products]
+    data = [int(p.stock or 0) for p in products]
+    return render_template('index.html', labels=labels, data=data)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port, debug=True)
