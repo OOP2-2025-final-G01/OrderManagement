@@ -11,7 +11,10 @@ def list():
     # 税込価格を計算してテンプレートに渡す
     for product in products:
         product.price_with_tax = float(product.price) * (1 + product.tax_rate / 100)
-    return render_template('product_list.html', title='製品一覧', items=products)
+    # 製品名ラベルと在庫データを作成（Chart.js 用）
+    labels = [p.name for p in products]
+    data = [int(p.stock or 0) for p in products]
+    return render_template('product_list.html', title='製品一覧', items=products, labels=labels, data=data)
 
 
 @product_bp.route('/add', methods=['GET', 'POST'])
