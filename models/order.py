@@ -1,14 +1,12 @@
-from peewee import Model, ForeignKeyField, DateTimeField, IntegerField
+from peewee import Model, ForeignKeyField, IntegerField, DecimalField
 from .db import db
-from .user import User
 from .product import Product
 
 class Order(Model):
-    user = ForeignKeyField(User, backref='orders')
     product = ForeignKeyField(Product, backref='orders')
-    # 【追加:注文数】注文数 (数量) を保存するフィールド
-    order_quantity = IntegerField(default=1)  # 整数型のフィールドとして追加し、デフォルト値を1に設定
-    order_date = DateTimeField()
+    quantity = IntegerField()
+    # 売上計算用：注文時の単価を保存
+    price_at_order = DecimalField(default=0)
 
     class Meta:
         database = db

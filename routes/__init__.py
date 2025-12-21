@@ -8,7 +8,7 @@ from .dashboard import dashboard_bp
 blueprints = [
   user_bp,
   product_bp,
-  order_bp,
-  store_bp
-  ,dashboard_bp
+  order_bp, # これが抜けているとルーティングエラーになります
+  store_bp,
+  dashboard_bp
 ]
