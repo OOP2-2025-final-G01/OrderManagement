@@ -5,6 +5,9 @@ import os
 
 app = Flask(__name__)
 
+# ↓ この1行を追加してください（'secret-key' の部分は好きな文字でOKです）
+app.secret_key = 'secret-key-1234'
+
 # データベースの初期化
 initialize_database()
 

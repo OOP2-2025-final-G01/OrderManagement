@@ -90,7 +90,8 @@
                 <p class="menu-label">売上管理</p>
                 <ul>
                     <li><a href="{{ url_for('order.add') }}">新規登録</a></li>
-                    <li><a href="{{ url_for('order.list') }}">売上一覧</a></li>
+                    <!-- <li><a href="{{ url_for('order.list') }}">売上一覧</a></li> -->
+                    <li><a href="{{ url_for('product.sales_chart') }}">売上一覧</a></li>
                 </ul>
             </div>
 
@@ -126,6 +127,11 @@
                     <h3 style="margin:6px 0 8px 0;">年齢分布</h3>
                     <img id="homeAgeChart" src="" alt="年齢分布" style="width:320px;max-width:90%;height:auto;display:none;border:1px solid #eee;padding:8px;background:#fff;">
                     <p id="homeAgeMessage" style="color:#666;margin-top:6px;"></p>
+                </div>
+
+                <div style="width:100%;max-width:1000px;margin-top:20px;">
+                    <h2 style="margin:6px 0 8px 0;text-align:left;">店舗別売上高</h2>
+                    <canvas id="homeSalesChart" style="width:100%;height:300px;"></canvas>
                 </div>
             </div>
 
@@ -189,6 +195,44 @@
                         }
                     } catch (err) {
                         console.error('ホーム在庫グラフの取得・描画中にエラー', err);
+                    }
+                })();
+            </script>
+
+            <script>
+            // 店舗別売上データを /dashboard/sales-chart-data から取得して描画
+            (async function(){
+                try {
+                    const res = await fetch("/dashboard/sales-chart-data");
+                    if (!res.ok) throw new Error('sales-data fetch failed');
+                    const payload = await res.json();
+                    
+                    const labels = payload.labels || [];
+                    const data = payload.values || []; // Python側で "values" という名前で返している場合
+
+                    const ctx = document.getElementById('homeSalesChart');
+                    if (ctx) {
+                        ctx.height = 300;
+                        new Chart(ctx, {
+                            type: 'bar', // 棒グラフ
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: '売上合計 (円)',
+                                    data: data,
+                                    backgroundColor: 'rgba(255, 159, 64, 0.6)', // 在庫グラフと色を変える（オレンジ）
+                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: { y: { beginAtZero: true } },
+                                plugins: { legend: { display: false } }
+                            }
+                        });
+                    }
+                    } catch (err) {
+                        console.error('店舗別売上グラフの取得・描画中にエラー', err);
                     }
                 })();
             </script>

@@ -7,14 +7,15 @@ from peewee import fn
 # Blueprint名を 'product' に設定
 product_bp = Blueprint('product', __name__, url_prefix='/products')
 
+
+# routes/product.py
 @product_bp.route('/')
 def list():
     products = Product.select()
-    # main側の変更を採用：税込価格を計算してテンプレートに渡す
-    for product in products:
-        product.price_with_tax = float(product.price) * (1 + product.tax_rate / 100)
-    
-    # 両方の良いとこ取り：title付きでレンダリング
+    # 以下の2行を削除！(すでに自動で計算される設定になっているため)
+    # for product in products:
+    #     product.price_with_tax = ... 
+
     return render_template('product_list.html', title='製品一覧', items=products)
 
 @product_bp.route('/chart-data')
@@ -57,7 +58,8 @@ def edit(product_id):
     stores = Store.select()
     return render_template('product_edit.html', product=product, stores=stores)
 
-@product_bp.route('/sales-chart')
+# @product_bp.route('/sales-chart')
+@product_bp.route('/sales-chart', methods=['GET']) # ここに methods=['GET'] を追加
 def sales_chart():
     """PR側で追加された新しいグラフ機能"""
     sales_data = (Store
