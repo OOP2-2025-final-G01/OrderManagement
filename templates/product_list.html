@@ -2,60 +2,29 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>データ一覧</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
 </head>
 <body>
     <h1>{{ title }}</h1>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li><a href="{{ url_for('product.list') }}">製品一覧</a></li>
-
+        <li>製品一覧</li>
     </ul>
-    <a href="{{ url_for('product.add') }}">新規製品追加</a>
-    <!-- 在庫グラフ（製品別） -->
-    <div style="width:90%;max-width:900px;margin:1rem 0;">
-        <canvas id="stockChart"></canvas>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // サーバーから渡されたラベルとデータを JS 配列に変換
-        const productLabels = {{ labels | tojson }};
-        const productData = {{ data | tojson }};
 
-        // 横向きバー（indexAxis: 'y'）
-        const ctx = document.getElementById('stockChart');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: productLabels,
-                datasets: [{
-                    label: '在庫数',
-                    data: productData,
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                scales: {
-                    x: { beginAtZero: true }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-    </script>
-    <table>
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('product.add') }}" class="button">新規製品追加</a>
+    </div>
+
+    <table class="data-table">
         <thead>
             <tr>
-                <th>&nbsp;</th>
+                <th>操作</th>
                 <th>製品名</th>
-                <th>価格（税抜）</th>
-                <th>消費税率</th>
-                <th>税込価格</th>
+                <th>所属店舗</th>
+                <th>価格(税抜)</th>
+                <th>税率</th>
+                <th>価格(税込)</th>
                 <th>在庫数</th>
             </tr>
         </thead>
@@ -64,6 +33,7 @@
             <tr>
                 <td><a href="{{ url_for('product.edit', product_id=product.id) }}">編集</a></td>
                 <td>{{ product.name }}</td>
+                <td>{{ product.store.name if product.store else '未設定' }}</td>
                 <td>¥{{ "%.2f"|format(product.price) }}</td>
                 <td>{{ product.tax_rate }}%</td>
                 <td>¥{{ "%.2f"|format(product.price_with_tax) }}</td>

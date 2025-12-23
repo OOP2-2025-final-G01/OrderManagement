@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ダッシュボード</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+<style>
+.graph-container { text-align:center; margin: 20px 0; }
+</style>
+</head>
+<body>
+<h1>ダッシュボード</h1>
+<ul class="breadcrumb">
+<li><a href="{{ url_for('index') }}">HOME</a></li>
+<li>ダッシュボード</li>
+</ul>
+
+{% if plot_url %}
+<div class="graph-container">
+<h3>ユーザー年齢分布</h3>
+<img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布" style="max-width:480px; height:auto;">
+</div>
+{% else %}
+<p>ユーザーの年齢分布データがありません。</p>
+{% endif %}
+
+<p><a href="{{ url_for('product.list') }}">製品一覧へ</a></p>
+</body>
+</html>

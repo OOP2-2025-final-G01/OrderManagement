@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>売上グラフ</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+<body>
+    <h1>店舗別売上集計グラフ</h1>
+    <div style="width: 80%; margin: 50px auto;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script id="chart-data" type="application/json">
+        { "labels": {{ labels|tojson }}, "values": {{ values|tojson }} }
+    </script>
+
+    <script>
+        const data = JSON.parse(document.getElementById('chart-data').textContent);
+        new Chart(document.getElementById('myChart'), {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: '売上合計(円)',
+                    data: data.values,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'blue',
+                    borderWidth: 1
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+</body>
+</html>

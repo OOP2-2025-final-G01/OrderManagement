@@ -45,12 +45,10 @@
         </form>
     </div>
 
-    {% if plot_url %}
-        <div class="graph-container">
-            <h3>年齢分布（{{ items|length }}件）</h3>
-            <img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布グラフ" style="max-width: 400px; height: auto;">
-        </div>
-    {% endif %}
+    <!-- 年齢分布のグラフはダッシュボードへ移動しました -->
+    <div class="graph-container">
+        <p>年齢分布のグラフはダッシュボードに移動しました。<a href="{{ url_for('dashboard.index') }}">ダッシュボードを表示</a></p>
+    </div>
 
     <div style="margin-bottom: 10px;">
         <a href="{{ url_for('user.add') }}">新規ユーザー登録</a>

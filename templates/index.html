@@ -110,7 +110,8 @@
                 <p class="menu-label">売上管理</p>
                 <ul>
                     <li><a href="{{ url_for('order.add') }}">新規登録</a></li>
-                    <li><a href="{{ url_for('order.list') }}">売上一覧</a></li>
+                    <!-- <li><a href="{{ url_for('order.list') }}">売上一覧</a></li> -->
+                    <li><a href="{{ url_for('product.sales_chart') }}">売上一覧</a></li>
                 </ul>
             </div>
 
@@ -133,14 +134,129 @@
         </nav>
 
         <main class="content">
-            <div class="content-title">
-                ※ ここにグラフが表示される予定です
-                {% if plot_url %}
-                <div class="graph-container">
-                    
+
+            <div class="content-title">ダッシュボード</div>
+
+            <!-- グラフ領域：製品在庫（上）→ 年齢分布（下） -->
+            <div class="dashboard-charts" style="display:flex;flex-direction:column;align-items:center;gap:18px;">
+                <div style="width:100%;max-width:1000px;">
+                    <h2 style="margin:6px 0 8px 0;text-align:left;">製品別在庫数</h2>
+                    <canvas id="homeStockChart" style="width:100%;height:300px;"></canvas>
                 </div>
-                {% endif %}
+
+                <div style="width:100%;max-width:480px;text-align:center;">
+                    <h3 style="margin:6px 0 8px 0;">年齢分布</h3>
+                    <img id="homeAgeChart" src="" alt="年齢分布" style="width:320px;max-width:90%;height:auto;display:none;border:1px solid #eee;padding:8px;background:#fff;">
+                    <p id="homeAgeMessage" style="color:#666;margin-top:6px;"></p>
+                </div>
+
+                <div style="width:100%;max-width:1000px;margin-top:20px;">
+                    <h2 style="margin:6px 0 8px 0;text-align:left;">店舗別売上高</h2>
+                    <canvas id="homeSalesChart" style="width:100%;height:300px;"></canvas>
+                </div>
             </div>
+
+            <script>
+                // 年齢分布を /dashboard/age-chart から取得して表示
+                (async function(){
+                    try {
+                        const res = await fetch('/dashboard/age-chart');
+                        if (!res.ok) throw new Error('age-chart fetch failed');
+                        const payload = await res.json();
+                        const plot = payload.plot_url;
+                        const img = document.getElementById('homeAgeChart');
+                        const msg = document.getElementById('homeAgeMessage');
+                        if (plot) {
+                            img.src = 'data:image/png;base64,' + plot;
+                            img.style.display = 'block';
+                            msg.textContent = '';
+                        } else {
+                            img.style.display = 'none';
+                            msg.textContent = '年齢分布データがありません。';
+                        }
+                    } catch (err) {
+                        console.error('年齢分布取得エラー', err);
+                    }
+                })();
+            </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                // ホームではサーバーから製品在庫データを取得して描画する（/products/chart-data）
+                (async function(){
+                    try {
+                        const res = await fetch("/products/chart-data");
+                        if (!res.ok) throw new Error('chart-data fetch failed');
+                        const payload = await res.json();
+                        const labels = payload.labels || [];
+                        const data = payload.data || [];
+
+                        const ctx = document.getElementById('homeStockChart');
+                        if (ctx) {
+                            // Canvas の高さを明示的に設定（Chart.js の自動サイズ調整を安定させる）
+                            ctx.height = 300;
+                            new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: '在庫数',
+                                        data: data,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    indexAxis: 'y',
+                                    scales: { x: { beginAtZero: true } },
+                                    plugins: { legend: { display: false } }
+                                }
+                            });
+                        }
+                    } catch (err) {
+                        console.error('ホーム在庫グラフの取得・描画中にエラー', err);
+                    }
+                })();
+            </script>
+
+            <script>
+            // 店舗別売上データを /dashboard/sales-chart-data から取得して描画
+            (async function(){
+                try {
+                    const res = await fetch("/dashboard/sales-chart-data");
+                    if (!res.ok) throw new Error('sales-data fetch failed');
+                    const payload = await res.json();
+                    
+                    const labels = payload.labels || [];
+                    const data = payload.values || []; // Python側で "values" という名前で返している場合
+
+                    const ctx = document.getElementById('homeSalesChart');
+                    if (ctx) {
+                        ctx.height = 300;
+                        new Chart(ctx, {
+                            type: 'bar', // 棒グラフ
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: '売上合計 (円)',
+                                    data: data,
+                                    backgroundColor: 'rgba(255, 159, 64, 0.6)', // 在庫グラフと色を変える（オレンジ）
+                                    borderColor: 'rgba(255, 159, 64, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: { y: { beginAtZero: true } },
+                                plugins: { legend: { display: false } }
+                            }
+                        });
+                    }
+                    } catch (err) {
+                        console.error('店舗別売上グラフの取得・描画中にエラー', err);
+                    }
+                })();
+            </script>
         </main>
     </div>
 </body>

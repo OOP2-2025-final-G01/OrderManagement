@@ -13,7 +13,7 @@
         <li>新規注文</li>
     </ul>
     
-    <form action="{{ url_for('order.add') }}" method="post">
+    <form action="{{ url_for('order.add') }}" method="post" class="data-form">
         <label>ユーザー: 
             <select name="user_id" required>
                 {% for user in users %}
@@ -21,18 +21,22 @@
                 {% endfor %}
             </select>
         </label><br>
-        <label>製品: 
+
+        <label>製品（店舗名も表示）: 
             <select name="product_id" required>
                 {% for product in products %}
-                    <option value="{{ product.id }}">{{ product.name }}</option>
+                    <option value="{{ product.id }}">
+                        {{ product.name }} (在庫: {{ product.stock }}) - {{ product.store.name if product.store else '店舗なし' }}
+                    </option>
                 {% endfor %}
             </select>
         </label><br>
+
         <label>注文数:
-            <input type="number" name="order_quantity" value="1" min="1" required>
+            <input type="number" name="quantity" value="1" min="1" required>
         </label><br>
         
-        <button type="submit">追加</button>
+        <button type="submit" class="button">注文を確定する</button>
     </form>
 </body>
 </html>
