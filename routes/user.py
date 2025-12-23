@@ -10,7 +10,7 @@ from models import User
 
 # Blueprintの作成
 user_bp = Blueprint('user', __name__, url_prefix='/users')
-
+#@user_bp.route('/')
 @user_bp.route('/')
 def list():
     search_query = request.args.get('search')
@@ -61,7 +61,7 @@ def list():
         plt.close()
 
     # 3. テンプレートへ渡す
-    return render_template('user_list.html', 
+    return render_template('index.html', 
                            title='ユーザー一覧', 
                            items=users, 
                            search_query=search_query, 

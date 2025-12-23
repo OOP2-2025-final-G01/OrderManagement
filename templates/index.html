@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>製品売上管理</title>
@@ -10,7 +11,8 @@
             margin: 0;
             padding: 0;
             font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
-            background-color: #ffffff; /* 全体を白基調に */
+            background-color: #ffffff;
+            /* 全体を白基調に */
         }
 
         .container {
@@ -22,7 +24,8 @@
         .sidebar {
             width: 240px;
             background-color: #ffffff;
-            border-right: 1px solid #eeeeee; /* 薄い境界線 */
+            border-right: 1px solid #eeeeee;
+            /* 薄い境界線 */
             padding: 40px 25px;
             box-sizing: border-box;
         }
@@ -58,13 +61,15 @@
 
         .sidebar a {
             text-decoration: none;
-            color: #666; /* リンクは少し薄い色 */
+            color: #666;
+            /* リンクは少し薄い色 */
             font-size: 15px;
             transition: 0.2s;
         }
 
         .sidebar a:hover {
-            color: #000; /* ホバーで黒く */
+            color: #000;
+            /* ホバーで黒く */
             font-weight: 500;
         }
 
@@ -77,15 +82,30 @@
 
         .content-title {
             font-size: 24px;
-            color: #ccc; /* グラフがない間は薄く表示 */
+            color: #ccc;
+            /* グラフがない間は薄く表示 */
+        }
+
+        /* グラフ表示エリアのスタイル */
+        .graph-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+        }
+
+        .search-area {
+            margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <nav class="sidebar">
             <h1 class="nav-title">製品売上<br>管理</h1>
-            
+
             <div class="menu-section">
                 <p class="menu-label">売上管理</p>
                 <ul>
@@ -115,8 +135,16 @@
         <main class="content">
             <div class="content-title">
                 ※ ここにグラフが表示される予定です
+                {% if plot_url %}
+                <div class="graph-container">
+                    <h3>年齢分布（{{ items|length }}件）</h3>
+                    <img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布グラフ"
+                        style="max-width: 400px; height: auto;">
+                </div>
+                {% endif %}
             </div>
         </main>
     </div>
 </body>
+
 </html>
