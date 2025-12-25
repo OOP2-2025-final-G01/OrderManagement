@@ -61,7 +61,7 @@ def list():
         plt.close()
 
     # 3. テンプレートへ渡す
-    return render_template('index.html', 
+    return render_template('user_list.html', 
                            title='ユーザー一覧', 
                            items=users, 
                            search_query=search_query, 

@@ -47,7 +47,12 @@
 
     <!-- 年齢分布のグラフはダッシュボードへ移動しました -->
     <div class="graph-container">
-        <p>年齢分布のグラフはダッシュボードに移動しました。<a href="{{ url_for('dashboard.index') }}">ダッシュボードを表示</a></p>
+        {% if plot_url %}
+            <h3>検索結果の年齢分布</h3>
+            <img src="data:image/png;base64,{{ plot_url }}" alt="年齢分布" style="max-width:480px; height:auto;">
+        {% else %}
+            <p>データ不足のためグラフを表示できません。</p>
+        {% endif %}
     </div>
 
     <div style="margin-bottom: 10px;">
